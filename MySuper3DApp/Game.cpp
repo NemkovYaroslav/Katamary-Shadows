@@ -4,6 +4,8 @@
 #include "InputDevice.h"
 #include "Camera.h"
 #include "GameObject.h"
+#include "LightComponent.h"
+#include "RenderShadows.h"
 
 Game* Game::instance = nullptr;
 
@@ -37,6 +39,8 @@ void Game::PrepareResources()
 	display = std::make_shared<DisplayWin32>(name, clientWidth, clientHeight, WndProc);
 	inputDevice = std::make_shared<InputDevice>();
 	render = std::make_shared<RenderSystem>();
+	renderShadows = std::make_shared<RenderShadows>();
+	//shadowRender = ...
 }
 
 void Game::Initialize()

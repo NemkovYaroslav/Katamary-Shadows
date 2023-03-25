@@ -7,6 +7,8 @@ class RenderSystem;
 class InputDevice;
 class CameraComponent;
 class TPSCameraController;
+class LightComponent;
+class RenderShadows;
 
 class Game
 {
@@ -30,6 +32,7 @@ protected:
 
 	std::shared_ptr<DisplayWin32> display;
 	std::shared_ptr<RenderSystem> render;
+	std::shared_ptr<RenderShadows> renderShadows;
 	std::shared_ptr<InputDevice>  inputDevice;
 
 	virtual void DestroyResources();
@@ -42,6 +45,8 @@ protected:
 public:
 
 	CameraComponent* currentCamera;
+
+	LightComponent* currentLight;
 
 	std::vector<GameObject*> gameObjects;
 

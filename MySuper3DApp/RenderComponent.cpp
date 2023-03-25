@@ -232,13 +232,29 @@ void RenderComponent::Initialize()
 		textureView.GetAddressOf()
 	);
 
+	//SHADOW
 	D3D11_SAMPLER_DESC samplerStateDesc = {};
-	samplerStateDesc.Filter   = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	samplerStateDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerStateDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 	samplerStateDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	samplerStateDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	samplerStateDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	samplerStateDesc.BorderColor[0] = 1.0f;
+	samplerStateDesc.BorderColor[1] = 0.0f;
+	samplerStateDesc.BorderColor[2] = 0.0f;
+	samplerStateDesc.BorderColor[3] = 1.0f;
+	samplerStateDesc.MaxLOD = INT_MAX;
+	samplerStateDesc.MaxAnisotropy = 1.0f;
 
 	res = Game::GetInstance()->GetRenderSystem()->device->CreateSamplerState(&samplerStateDesc, samplerState.GetAddressOf());
+
+	samplerStateDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerStateDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerStateDesc.Filter = D3D11_FILTER_COMPARISON_MIN_MAG_MIP_LINEAR;
+	samplerStateDesc.ComparisonFunc = D3D11_COMPARISON_LESS;
+
+	res = Game::GetInstance()->GetRenderSystem()->device->CreateSamplerState(&samplerStateDesc, shadowSamplerState.GetAddressOf());
+	//SHADOW
 
 	CD3D11_RASTERIZER_DESC rastDesc = {};
 	rastDesc.CullMode = D3D11_CULL_NONE;

@@ -48,5 +48,9 @@ protected:
     std::string textureFileName;
     Microsoft::WRL::ComPtr<ID3D11Resource> texture;
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureView;
+
+    //SHADOW
     Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState;
+    Microsoft::WRL::ComPtr<ID3D11SamplerState> shadowSamplerState;
+    //SHADOW
 };

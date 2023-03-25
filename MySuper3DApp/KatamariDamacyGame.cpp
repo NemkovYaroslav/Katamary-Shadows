@@ -1,10 +1,11 @@
 #include "KatamariDamacyGame.h"
-#include "DebugObject.h"
+#include "GameObject.h"
 #include "Camera.h"
 #include "CameraController.h"
 #include "FPSCameraController.h"
 #include "KatamariControllerComponent.h"
 #include "CollisionComponent.h"
+#include "LightComponent.h"
 
 KatamariDamacyGame::KatamariDamacyGame(LPCWSTR name, int clientWidth, int clientHeight) : Game(name, clientWidth, clientHeight)
 {
@@ -42,13 +43,18 @@ void KatamariDamacyGame::Initialize()
 	Game::GetInstance()->currentCamera = cameraComponent;
 	katamariController->cameraTransform = camera->transformComponent;
 
-	//GameObject* pointLightCube = new GameObject();
-	//pointLightCube->CreateMesh(1.0f, "../Textures/white.jpg", "../Models/cube.fbx");
+	GameObject* removeLight = new GameObject();
+	LightComponent* lightComponent = new LightComponent();
+	removeLight->AddComponent(lightComponent);
+	Game::GetInstance()->currentLight = lightComponent;
+	removeLight->CreateMesh(0.1f, "../Textures/ground.jpg", "../Models/arrow.obj");
+	removeLight->transformComponent->SetRotation(Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::Forward, -DirectX::XM_PIDIV2));
+	removeLight->transformComponent->SetPosition(Vector3(0.0f, 15.0f, 0.0f));
 
-	Game::GetInstance()->AddGameObject(ground);   // 0
-	Game::GetInstance()->AddGameObject(camera);   // 1
-	Game::GetInstance()->AddGameObject(katamari); // 2
-	//Game::GetInstance()->AddGameObject(pointLightCube);
+	Game::GetInstance()->AddGameObject(ground);      // 0
+	Game::GetInstance()->AddGameObject(camera);      // 1
+	Game::GetInstance()->AddGameObject(katamari);    // 2
+	Game::GetInstance()->AddGameObject(removeLight); // 3
 	
 	GameObject* bigBoy = new GameObject();
 	bigBoy->isUseLight = true;

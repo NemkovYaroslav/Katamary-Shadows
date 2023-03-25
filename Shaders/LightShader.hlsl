@@ -63,6 +63,8 @@ float4 PSMain(PS_IN input) : SV_Target
 
 float3 CalcDirLight(RemLight remLight, float3 normal, float3 viewDir, float2 tex)
 {
+    float3 diffValue = DiffuseMap.Sample(Sampler, tex).rgb;
+    
     float3 lightDir = normalize( - remLight.direction);
 
     float diff = max(dot(normal, lightDir), 0.0);
@@ -70,9 +72,9 @@ float3 CalcDirLight(RemLight remLight, float3 normal, float3 viewDir, float2 tex
     float3 reflectDir = reflect( - lightDir, normal);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 128);
 
-    float3 ambient  = remLight.ambient         * DiffuseMap.Sample(Sampler, tex).rgb;
-    float3 diffuse  = remLight.diffuse  * diff * DiffuseMap.Sample(Sampler, tex).rgb;
-    float3 specular = remLight.specular * spec * DiffuseMap.Sample(Sampler, tex).rgb;
+    float3 ambient  = remLight.ambient         * diffValue;
+    float3 diffuse  = remLight.diffuse  * diff * diffValue;
+    float3 specular = remLight.specular * spec * diffValue;
     
     return (ambient + diffuse + specular);
 }
