@@ -10,9 +10,6 @@ RenderShadows::RenderShadows()
 {
 	D3D11_TEXTURE2D_DESC textureDesc = {};
 	ZeroMemory(&textureDesc, sizeof(textureDesc));
-
-	//textureDesc.Width = Game::GetInstance()->GetDisplay()->GetClientWidth();
-	//textureDesc.Height = Game::GetInstance()->GetDisplay()->GetClientHeight();
 	textureDesc.Width = static_cast<float>(1024);
 	textureDesc.Height = static_cast<float>(1024);
 	textureDesc.MipLevels = 1;
@@ -48,6 +45,7 @@ RenderShadows::RenderShadows()
 	result = Game::GetInstance()->GetRenderSystem()->device->CreateDepthStencilState(&depthStencilStateDesc, depthStencilState.GetAddressOf());
 	if (FAILED(result)) { return; }
 
+	/*
 	Microsoft::WRL::ComPtr<ID3DBlob> vertexShaderByteCode;
 	ID3DBlob* errorCode = nullptr;
 	auto res = D3DCompileFromFile(
@@ -141,6 +139,7 @@ RenderShadows::RenderShadows()
 	rastDesc.FillMode = D3D11_FILL_SOLID;
 
 	result = Game::GetInstance()->GetRenderSystem()->device->CreateRasterizerState(&rastDesc, rastState.GetAddressOf());
+	*/
 
 	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc(D3D11_SRV_DIMENSION_TEXTURE2D, DXGI_FORMAT_R32G32B32A32_FLOAT);
 	result = Game::GetInstance()->GetRenderSystem()->device->CreateShaderResourceView(lightDepthBufferTexture.Get(), &srvDesc, textureResourceView.GetAddressOf());
@@ -148,8 +147,6 @@ RenderShadows::RenderShadows()
 	D3D11_TEXTURE2D_DESC depthStencilDesc;
 	depthStencilDesc.Width = static_cast<float>(1024);
 	depthStencilDesc.Height = static_cast<float>(1024);
-	//depthStencilDesc.Width = Game::GetInstance()->GetDisplay()->GetClientWidth();
-	//depthStencilDesc.Height = Game::GetInstance()->GetDisplay()->GetClientHeight();
 	depthStencilDesc.MipLevels = 1;
 	depthStencilDesc.ArraySize = 1;
 	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -161,21 +158,15 @@ RenderShadows::RenderShadows()
 	depthStencilDesc.MiscFlags = 0;
 
 	result = Game::GetInstance()->GetRenderSystem()->device->CreateTexture2D(&depthStencilDesc, NULL, depthStencilBuffer.GetAddressOf());
-	if (FAILED(result)) //If error occurred
-	{
-		return;
-	}
+	if (FAILED(result)) { return; }
 
 	result = Game::GetInstance()->GetRenderSystem()->device->CreateDepthStencilView(depthStencilBuffer.Get(), NULL, depthStencilView.GetAddressOf());
-	if (FAILED(result)) //If error occurred
-	{
-		return;
-	}
+	if (FAILED(result)) { return; }
 }
 
 void RenderShadows::Draw()
 {
-	Game::GetInstance()->GetRenderSystem()->context->OMSetRenderTargets(1, lightDepthBufferRenderTargetView.GetAddressOf(), depthStencilView.Get());
+	//Game::GetInstance()->GetRenderSystem()->context->OMSetRenderTargets(1, lightDepthBufferRenderTargetView.GetAddressOf(), depthStencilView.Get());
 	float bgcolor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	Game::GetInstance()->GetRenderSystem()->context->ClearRenderTargetView(lightDepthBufferRenderTargetView.Get(), bgcolor);
 	Game::GetInstance()->GetRenderSystem()->context->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);

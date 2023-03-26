@@ -39,7 +39,7 @@ void Game::PrepareResources()
 	display = std::make_shared<DisplayWin32>(name, clientWidth, clientHeight, WndProc);
 	inputDevice = std::make_shared<InputDevice>();
 	render = std::make_shared<RenderSystem>();
-	//renderShadows = std::make_shared<RenderShadows>();
+	renderShadows = std::make_shared<RenderShadows>();
 }
 
 void Game::Initialize()
@@ -109,7 +109,7 @@ void Game::Draw()
 {
 	render->PrepareFrame();
 	render->Draw();
-	//renderShadows->Draw();
+	renderShadows->Draw();
 	render->EndFrame();
 }
 

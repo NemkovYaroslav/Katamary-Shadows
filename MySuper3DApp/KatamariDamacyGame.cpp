@@ -20,6 +20,7 @@ void KatamariDamacyGame::Initialize()
 	ground->isUseLight = false;
 	ground->CreatePlane(25.0f, "../Textures/moon.jpg");
 	ground->transformComponent->SetRotation(Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::Right, DirectX::XM_PIDIV2));
+	//ground->transformComponent->SetPosition(Vector3(10, 0, 0));
 
 	GameObject* katamari = new GameObject();
 	katamari->isUseLight = true;
@@ -48,8 +49,8 @@ void KatamariDamacyGame::Initialize()
 	LightComponent* lightComponent = new LightComponent();
 	removeLight->AddComponent(lightComponent);
 	Game::GetInstance()->currentLight = lightComponent;
-	removeLight->CreateMesh(0.1f, "../Textures/ground.jpg", "../Models/arrow.obj");
-	removeLight->transformComponent->SetRotation(Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::Forward, -DirectX::XM_PIDIV2));
+	//removeLight->CreateMesh(0.1f, "../Textures/ground.jpg", "../Models/arrow.obj");
+	removeLight->transformComponent->SetRotation(Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::Left, DirectX::XM_PIDIV2));
 	removeLight->transformComponent->SetPosition(Vector3(0.0f, 10.0f, 0.0f));
 
 	Game::GetInstance()->AddGameObject(ground);      // 0

@@ -78,3 +78,36 @@ float3 CalcDirLight(RemLight remLight, float3 normal, float3 viewDir, float2 tex
     
     return (ambient + diffuse + specular);
 }
+
+/*
+float IsLighted(float4 lightViewPosition)
+{
+    float bias = 0.0005f;
+    float isVisibleForLight = 0;
+    float3 projectTexCoord;
+
+    projectTexCoord.x = lightViewPosition.x / lightViewPosition.w;
+    projectTexCoord.y = lightViewPosition.y / lightViewPosition.w;
+    projectTexCoord.z = lightViewPosition.z / lightViewPosition.w;
+
+    projectTexCoord.x = projectTexCoord.x * 0.5 + 0.5f;
+    projectTexCoord.y = projectTexCoord.y * -0.5 + 0.5f;
+
+    float max_depth = depthTexture.Sample(objSamplerState, projectTexCoord.xy).r;
+
+    float currentDepth = (lightViewPosition.z / lightViewPosition.w);
+
+    currentDepth = currentDepth - bias;
+
+    if (max_depth >= currentDepth)
+    {
+        isVisibleForLight = 1;
+    }
+    else
+    {
+        isVisibleForLight = 0;
+    }
+
+    return isVisibleForLight;
+}
+*/
