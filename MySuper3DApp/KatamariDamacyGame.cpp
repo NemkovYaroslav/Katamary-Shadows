@@ -56,8 +56,6 @@ void KatamariDamacyGame::Initialize()
 	Game::GetInstance()->AddGameObject(camera);      // 1
 	Game::GetInstance()->AddGameObject(katamari);    // 2
 	Game::GetInstance()->AddGameObject(removeLight); // 3
-	
-	//GameObject* depthPlane = new GameObject();
 
 	GameObject* bigBoy = new GameObject();
 	bigBoy->isUseLight = true;

@@ -175,7 +175,6 @@ RenderShadows::RenderShadows()
 
 void RenderShadows::Draw()
 {
-	//Game::GetInstance()->GetRenderSystem()->context->ClearState();
 	Game::GetInstance()->GetRenderSystem()->context->OMSetRenderTargets(1, lightDepthBufferRenderTargetView.GetAddressOf(), depthStencilView.Get());
 	float bgcolor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
 	Game::GetInstance()->GetRenderSystem()->context->ClearRenderTargetView(lightDepthBufferRenderTargetView.Get(), bgcolor);

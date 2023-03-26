@@ -62,6 +62,8 @@ void RenderShadowsComponent::Draw()
 	Game::GetInstance()->GetRenderSystem()->context->VSSetShader(Game::GetInstance()->GetRenderShadowsSystem()->vertexShader.Get(), nullptr, 0);
 	Game::GetInstance()->GetRenderSystem()->context->PSSetShader(Game::GetInstance()->GetRenderShadowsSystem()->pixelShader.Get(), nullptr, 0);
 
+	Game::GetInstance()->GetRenderSystem()->context->OMSetDepthStencilState(Game::GetInstance()->GetRenderShadowsSystem()->depthStencilState.Get(), 0); //
+
 	Game::GetInstance()->GetRenderSystem()->context->VSSetConstantBuffers(0, 1, constBuffer.GetAddressOf());
 	Game::GetInstance()->GetRenderSystem()->context->PSSetConstantBuffers(0, 1, constBuffer.GetAddressOf());
 

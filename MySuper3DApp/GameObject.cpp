@@ -57,8 +57,8 @@ void GameObject::CreateMesh(float scaleRate, std::string textureFileName, std::s
 	renderComponent->isLight = isUseLight;
 	AddComponent(renderComponent);
 
-	renderShadowsComponent = new RenderShadowsComponent(renderComponent); //
-	AddComponent(renderShadowsComponent); //
+	//renderShadowsComponent = new RenderShadowsComponent(renderComponent); //
+	//AddComponent(renderShadowsComponent); //
 
 	renderComponent->AddMesh(scaleRate, objectFileName);
 }

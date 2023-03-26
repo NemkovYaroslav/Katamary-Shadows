@@ -45,6 +45,12 @@ struct alignas(16) LightData
 	RemLightData RemLight;
 };
 
+struct alignas(16) ShadowData
+{
+	Vector3 lightCameraPosition;
+	Matrix lightMatrix;
+};
+
 void RenderComponent::Initialize()
 {
 	if (isLight)
