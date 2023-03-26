@@ -2,7 +2,6 @@ cbuffer CameraConstantBuffer : register(b0)
 {
     row_major matrix viewProjection;
     row_major matrix model;
-    float3 cameraPosition;
 };
 
 struct VS_IN
@@ -30,10 +29,8 @@ PS_IN VSMain(VS_IN input)
     return output;
 }
 
-Texture2D DiffuseMap;
-SamplerState Sampler;
-
 float4 PSMain(PS_IN input) : SV_Target
 {
-    return DiffuseMap.SampleLevel(Sampler, input.tex.xy, 0);
+    float depth = input.pos.z / input.pos.w;
+    return float4(depth, depth, depth, 1);
 }

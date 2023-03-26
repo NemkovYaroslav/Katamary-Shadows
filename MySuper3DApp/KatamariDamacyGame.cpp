@@ -6,6 +6,7 @@
 #include "KatamariControllerComponent.h"
 #include "CollisionComponent.h"
 #include "LightComponent.h"
+#include "RenderShadows.h"
 
 KatamariDamacyGame::KatamariDamacyGame(LPCWSTR name, int clientWidth, int clientHeight) : Game(name, clientWidth, clientHeight)
 {
@@ -49,13 +50,15 @@ void KatamariDamacyGame::Initialize()
 	Game::GetInstance()->currentLight = lightComponent;
 	removeLight->CreateMesh(0.1f, "../Textures/ground.jpg", "../Models/arrow.obj");
 	removeLight->transformComponent->SetRotation(Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::Forward, -DirectX::XM_PIDIV2));
-	removeLight->transformComponent->SetPosition(Vector3(0.0f, 15.0f, 0.0f));
+	removeLight->transformComponent->SetPosition(Vector3(0.0f, 10.0f, 0.0f));
 
 	Game::GetInstance()->AddGameObject(ground);      // 0
 	Game::GetInstance()->AddGameObject(camera);      // 1
 	Game::GetInstance()->AddGameObject(katamari);    // 2
 	Game::GetInstance()->AddGameObject(removeLight); // 3
 	
+	//GameObject* depthPlane = new GameObject();
+
 	GameObject* bigBoy = new GameObject();
 	bigBoy->isUseLight = true;
 	bigBoy->CreateMesh(2.0f, "../Textures/SpaceMan.png", "../Models/SpaceMan.fbx");

@@ -6,6 +6,14 @@
 
 RenderSystem::RenderSystem()
 {
+	viewport = std::make_shared<D3D11_VIEWPORT>();
+	viewport->TopLeftX = 0;
+	viewport->TopLeftY = 0;
+	viewport->Width = static_cast<float>(Game::GetInstance()->GetDisplay()->GetClientWidth());
+	viewport->Height = static_cast<float>(Game::GetInstance()->GetDisplay()->GetClientHeight());
+	viewport->MinDepth = 0;
+	viewport->MaxDepth = 1.0f;
+
 	D3D_FEATURE_LEVEL featureLevel[] = { D3D_FEATURE_LEVEL_11_1 };
 
 	DXGI_SWAP_CHAIN_DESC swapChainDesc = {};
@@ -55,20 +63,12 @@ RenderSystem::RenderSystem()
 	depthTexDesc.Height = Game::GetInstance()->GetDisplay()->GetClientHeight();
 	depthTexDesc.SampleDesc = { 1, 0 };
 
-	device->CreateTexture2D(&depthTexDesc, nullptr, &depthBuffer);
+	device->CreateTexture2D(&depthTexDesc, nullptr, depthBuffer.GetAddressOf());
 	device->CreateDepthStencilView(depthBuffer.Get(), nullptr, &depthView);
 }
 
 void RenderSystem::PrepareFrame()
 {
-	viewport = std::make_shared<D3D11_VIEWPORT>();
-	viewport->TopLeftX = 0;
-	viewport->TopLeftY = 0;
-	viewport->Width = static_cast<float>(Game::GetInstance()->GetDisplay()->GetClientWidth());
-	viewport->Height = static_cast<float>(Game::GetInstance()->GetDisplay()->GetClientHeight());
-	viewport->MinDepth = 0;
-	viewport->MaxDepth = 1.0f;
-
 	context->ClearState();
 	context->OMSetRenderTargets(1, renderView.GetAddressOf(), depthView.Get());
 	context->RSSetViewports(1, viewport.get());

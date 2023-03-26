@@ -2,6 +2,7 @@
 
 #include "Transform.h"
 #include "RenderComponent.h"
+#include "RenderShadowsComponent.h"
 #include "Component.h"
 
 #include "Game.h"
@@ -55,6 +56,10 @@ void GameObject::CreateMesh(float scaleRate, std::string textureFileName, std::s
 	}
 	renderComponent->isLight = isUseLight;
 	AddComponent(renderComponent);
+
+	renderShadowsComponent = new RenderShadowsComponent(renderComponent); //
+	AddComponent(renderShadowsComponent); //
+
 	renderComponent->AddMesh(scaleRate, objectFileName);
 }
 

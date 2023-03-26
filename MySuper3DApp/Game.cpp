@@ -40,7 +40,6 @@ void Game::PrepareResources()
 	inputDevice = std::make_shared<InputDevice>();
 	render = std::make_shared<RenderSystem>();
 	renderShadows = std::make_shared<RenderShadows>();
-	//shadowRender = ...
 }
 
 void Game::Initialize()
@@ -110,6 +109,7 @@ void Game::Draw()
 {
 	render->PrepareFrame();
 	render->Draw();
+	renderShadows->Draw();
 	render->EndFrame();
 }
 
@@ -127,9 +127,10 @@ void Game::AddGameObject(GameObject* gameObject)
 	gameObjects.push_back(gameObject);
 }
 
-std::shared_ptr<RenderSystem> Game::GetRenderSystem() { return render;      }
-std::shared_ptr<DisplayWin32> Game::GetDisplay()      { return display;     }
-std::shared_ptr<InputDevice>  Game::GetInputDevice()  { return inputDevice; }
+std::shared_ptr<RenderSystem>  Game::GetRenderSystem()        { return render;        }
+std::shared_ptr<RenderShadows> Game::GetRenderShadowsSystem() { return renderShadows; }
+std::shared_ptr<DisplayWin32>  Game::GetDisplay()             { return display;       }
+std::shared_ptr<InputDevice>   Game::GetInputDevice()         { return inputDevice;   }
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 {

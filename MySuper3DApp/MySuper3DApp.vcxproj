@@ -170,6 +170,7 @@
     <ClCompile Include="MySuper3DApp.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="RenderShadows.cpp" />
+    <ClCompile Include="RenderShadowsComponent.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="SimpleMath.cpp" />
     <ClCompile Include="Transform.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="LightComponent.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="RenderShadows.h" />
+    <ClInclude Include="RenderShadowsComponent.h" />
     <ClInclude Include="RenderSystem.h" />
     <ClInclude Include="SimpleMath.h" />
     <ClInclude Include="Transform.h" />

@@ -61,9 +61,10 @@ public:
 
 	void AddGameObject(GameObject* gameObject);
 
-	std::shared_ptr<RenderSystem> GetRenderSystem();
-	std::shared_ptr<DisplayWin32> GetDisplay();
-	std::shared_ptr<InputDevice>  GetInputDevice();
+	std::shared_ptr<RenderSystem>  GetRenderSystem();
+	std::shared_ptr<RenderShadows> GetRenderShadowsSystem();
+	std::shared_ptr<DisplayWin32>  GetDisplay();
+	std::shared_ptr<InputDevice>   GetInputDevice();
 
 	LRESULT MessageHandler(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam);
 };

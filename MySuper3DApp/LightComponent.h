@@ -12,7 +12,7 @@ public:
 	virtual void Initialize() override;
 
 	XMMATRIX GetViewMatrix();
-	XMMATRIX GetOrthographicMatrix();
+	XMMATRIX GetProjectionMatrix();
 
 	float viewWidth;
 	float viewHeight;

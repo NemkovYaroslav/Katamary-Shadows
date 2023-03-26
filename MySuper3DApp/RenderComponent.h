@@ -30,8 +30,6 @@ public:
     void ProcessNode(aiNode* node, const aiScene* scene, float scaleRate);
     void ProcessMesh(aiMesh* mesh, const aiScene* scene, float scaleRate);
 
-protected:
-
     std::string shaderFileName;
     D3D_PRIMITIVE_TOPOLOGY topology;
     std::vector<Vector4> points;
@@ -48,9 +46,5 @@ protected:
     std::string textureFileName;
     Microsoft::WRL::ComPtr<ID3D11Resource> texture;
     Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureView;
-
-    //SHADOW
     Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState;
-    Microsoft::WRL::ComPtr<ID3D11SamplerState> shadowSamplerState;
-    //SHADOW
 };

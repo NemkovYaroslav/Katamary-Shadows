@@ -3,6 +3,7 @@
 
 class TransformComponent;
 class RenderComponent;
+class RenderShadowsComponent;
 class CollisionComponent;
 class Component;
 
@@ -14,6 +15,7 @@ public:
 
 	TransformComponent* transformComponent;
 	RenderComponent* renderComponent;
+	RenderShadowsComponent* renderShadowsComponent;
 	CollisionComponent* collisionComponent;
 
 	std::vector<Component*> components;

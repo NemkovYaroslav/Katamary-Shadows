@@ -4,19 +4,17 @@
 #include "RenderComponent.h"
 #include "Game.h"
 #include "RenderSystem.h"
+#include "RenderShadowsComponent.h"
 
 RenderShadows::RenderShadows()
 {
-
-}
-
-void RenderShadows::Initialize()
-{
-	D3D11_TEXTURE2D_DESC textureDesc;
+	D3D11_TEXTURE2D_DESC textureDesc = {};
 	ZeroMemory(&textureDesc, sizeof(textureDesc));
 
-	textureDesc.Width = Game::GetInstance()->GetDisplay()->GetClientWidth();
-	textureDesc.Width = Game::GetInstance()->GetDisplay()->GetClientHeight();
+	//textureDesc.Width = Game::GetInstance()->GetDisplay()->GetClientWidth();
+	//textureDesc.Height = Game::GetInstance()->GetDisplay()->GetClientHeight();
+	textureDesc.Width = static_cast<float>(1024);
+	textureDesc.Height = static_cast<float>(1024);
 	textureDesc.MipLevels = 1;
 	textureDesc.ArraySize = 1;
 	textureDesc.Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
@@ -26,7 +24,7 @@ void RenderShadows::Initialize()
 	textureDesc.CPUAccessFlags = 0;
 	textureDesc.MiscFlags = 0;
 
-	auto result = Game::GetInstance()->GetRenderSystem()->device->CreateTexture2D(&textureDesc, NULL, &lightDepthBufferTexture);
+	auto result = Game::GetInstance()->GetRenderSystem()->device->CreateTexture2D(&textureDesc, nullptr, lightDepthBufferTexture.GetAddressOf());
 	if (FAILED(result))
 		return;
 
@@ -35,17 +33,10 @@ void RenderShadows::Initialize()
 	renderTargetViewDesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 	renderTargetViewDesc.Texture2D.MipSlice = 0;
 
-	result = Game::GetInstance()->GetRenderSystem()->device->CreateRenderTargetView(lightDepthBufferTexture, &renderTargetViewDesc, &lightDepthBufferRenderTargetView);
+	result = Game::GetInstance()->GetRenderSystem()->device->CreateRenderTargetView(lightDepthBufferTexture.Get(), &renderTargetViewDesc, lightDepthBufferRenderTargetView.GetAddressOf());
 	if (FAILED(result))
 		return;
-
-
-	CD3D11_RASTERIZER_DESC rastDesc = {};
-	rastDesc.CullMode = D3D11_CULL_NONE;
-	rastDesc.FillMode = D3D11_FILL_SOLID;
-
-	result = Game::GetInstance()->GetRenderSystem()->device->CreateRasterizerState(&rastDesc, &rastState);
-
+	// пайплайн
 
 	D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
 	ZeroMemory(&depthStencilStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
@@ -54,7 +45,7 @@ void RenderShadows::Initialize()
 	depthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
 	depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS_EQUAL;
 
-	result = Game::GetInstance()->GetRenderSystem()->device->CreateDepthStencilState(&depthStencilStateDesc, &depthStencilState);
+	result = Game::GetInstance()->GetRenderSystem()->device->CreateDepthStencilState(&depthStencilStateDesc, depthStencilState.GetAddressOf());
 	if (FAILED(result)) { return; }
 
 	Microsoft::WRL::ComPtr<ID3DBlob> vertexShaderByteCode;
@@ -145,12 +136,20 @@ void RenderShadows::Initialize()
 		inputLayout.GetAddressOf()
 	);
 
+	CD3D11_RASTERIZER_DESC rastDesc = {};
+	rastDesc.CullMode = D3D11_CULL_NONE;
+	rastDesc.FillMode = D3D11_FILL_SOLID;
+
+	result = Game::GetInstance()->GetRenderSystem()->device->CreateRasterizerState(&rastDesc, rastState.GetAddressOf());
+
 	CD3D11_SHADER_RESOURCE_VIEW_DESC srvDesc(D3D11_SRV_DIMENSION_TEXTURE2D, DXGI_FORMAT_R32G32B32A32_FLOAT);
-	result = Game::GetInstance()->GetRenderSystem()->device->CreateShaderResourceView(lightDepthBufferTexture, &srvDesc, &textureResourceView);
+	result = Game::GetInstance()->GetRenderSystem()->device->CreateShaderResourceView(lightDepthBufferTexture.Get(), &srvDesc, textureResourceView.GetAddressOf());
 
 	D3D11_TEXTURE2D_DESC depthStencilDesc;
 	depthStencilDesc.Width = static_cast<float>(1024);
 	depthStencilDesc.Height = static_cast<float>(1024);
+	//depthStencilDesc.Width = Game::GetInstance()->GetDisplay()->GetClientWidth();
+	//depthStencilDesc.Height = Game::GetInstance()->GetDisplay()->GetClientHeight();
 	depthStencilDesc.MipLevels = 1;
 	depthStencilDesc.ArraySize = 1;
 	depthStencilDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
@@ -161,13 +160,13 @@ void RenderShadows::Initialize()
 	depthStencilDesc.CPUAccessFlags = 0;
 	depthStencilDesc.MiscFlags = 0;
 
-	result = Game::GetInstance()->GetRenderSystem()->device->CreateTexture2D(&depthStencilDesc, NULL, this->depthStencilBuffer.GetAddressOf());
+	result = Game::GetInstance()->GetRenderSystem()->device->CreateTexture2D(&depthStencilDesc, NULL, depthStencilBuffer.GetAddressOf());
 	if (FAILED(result)) //If error occurred
 	{
 		return;
 	}
 
-	result = Game::GetInstance()->GetRenderSystem()->device->CreateDepthStencilView(this->depthStencilBuffer.Get(), NULL, this->depthStencilView.GetAddressOf());
+	result = Game::GetInstance()->GetRenderSystem()->device->CreateDepthStencilView(depthStencilBuffer.Get(), NULL, depthStencilView.GetAddressOf());
 	if (FAILED(result)) //If error occurred
 	{
 		return;
@@ -176,9 +175,14 @@ void RenderShadows::Initialize()
 
 void RenderShadows::Draw()
 {
-	Game::GetInstance()->GetRenderSystem()->context->OMSetRenderTargets(1, &lightDepthBufferRenderTargetView, depthStencilView.Get());
-
+	//Game::GetInstance()->GetRenderSystem()->context->ClearState();
+	Game::GetInstance()->GetRenderSystem()->context->OMSetRenderTargets(1, lightDepthBufferRenderTargetView.GetAddressOf(), depthStencilView.Get());
 	float bgcolor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	Game::GetInstance()->GetRenderSystem()->context->ClearRenderTargetView(lightDepthBufferRenderTargetView, bgcolor);
+	Game::GetInstance()->GetRenderSystem()->context->ClearRenderTargetView(lightDepthBufferRenderTargetView.Get(), bgcolor);
 	Game::GetInstance()->GetRenderSystem()->context->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+	for (auto& renderShadowsComponent : renderShadowsComponents)
+	{
+		renderShadowsComponent->Draw();
+	}
+	Game::GetInstance()->GetRenderSystem()->context->OMSetRenderTargets(0, nullptr, nullptr);
 }
