@@ -9,7 +9,11 @@ class RenderShadows
 public:
 
 	RenderShadows();
+	void PrepareFrame();
 	void Draw();
+	void EndFrame();
+
+	std::shared_ptr<D3D11_VIEWPORT> viewport;
 
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> lightDepthBufferTexture; //
 	Microsoft::WRL::ComPtr<ID3D11RenderTargetView> lightDepthBufferRenderTargetView;
@@ -17,6 +21,7 @@ public:
 
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilView> depthStencilView; //
 	Microsoft::WRL::ComPtr<ID3D11Texture2D> depthStencilBuffer; //
+
 	Microsoft::WRL::ComPtr<ID3D11DepthStencilState> depthStencilState; //
 
 	/*

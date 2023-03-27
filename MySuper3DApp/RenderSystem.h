@@ -16,7 +16,6 @@ public:
 	virtual void Draw();
 	virtual void EndFrame();
 	virtual void PrepareFrame();
-	void RemoveRenderComponent(RenderComponent* renderComponent);
 
 public:
 

@@ -36,7 +36,6 @@ void RenderShadowsComponent::Initialize()
 		vertexShaderByteCode.GetAddressOf(),
 		&errorCode
 	);
-
 	if (FAILED(res))
 	{
 		if (errorCode)
@@ -50,7 +49,6 @@ void RenderShadowsComponent::Initialize()
 		}
 		return;
 	}
-
 	Game::GetInstance()->GetRenderSystem()->device->CreateVertexShader(
 		vertexShaderByteCode->GetBufferPointer(),
 		vertexShaderByteCode->GetBufferSize(),

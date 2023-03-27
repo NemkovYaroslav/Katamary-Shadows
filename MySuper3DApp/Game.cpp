@@ -108,9 +108,10 @@ void Game::UpdateInternal()
 void Game::Draw()
 {
 	render->PrepareFrame();
-	//renderShadows->Draw();
 	render->Draw();
+	renderShadows->PrepareFrame();
 	renderShadows->Draw();
+	renderShadows->EndFrame();
 	render->EndFrame();
 }
 

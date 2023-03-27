@@ -91,13 +91,3 @@ void RenderSystem::EndFrame()
 	context->OMSetRenderTargets(0, nullptr, nullptr);
 	swapChain->Present(1, /*DXGI_PRESENT_DO_NOT_WAIT*/ 0);
 }
-
-void RenderSystem::RemoveRenderComponent(RenderComponent* renderComponent)
-{
-	for (size_t i = 0; i < renderComponents.size(); i++) {
-		if (renderComponents[i] == renderComponent) {
-			renderComponents.erase(renderComponents.begin() + i);
-			return;
-		}
-	}
-}

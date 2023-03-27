@@ -17,7 +17,6 @@ public:
     RenderComponent(std::string shaderFileName, D3D_PRIMITIVE_TOPOLOGY topology);
     RenderComponent(std::string shaderFileName, std::string textureFileName, D3D_PRIMITIVE_TOPOLOGY topology);
     RenderComponent() = delete;
-    ~RenderComponent();
 
     virtual void Initialize() override;
     virtual void Update(float deltaTime) override;

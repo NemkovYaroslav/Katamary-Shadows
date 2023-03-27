@@ -21,12 +21,6 @@ RenderComponent::RenderComponent(std::string shaderFileName, std::string texture
 	this->shaderFileName = shaderFileName;
 	this->topology = topology;
 }
-
-RenderComponent::~RenderComponent()
-{
-	Game::GetInstance()->GetRenderSystem()->RemoveRenderComponent(this);
-}
-
 struct alignas(16) CameraData
 {
 	Matrix viewProjection;
