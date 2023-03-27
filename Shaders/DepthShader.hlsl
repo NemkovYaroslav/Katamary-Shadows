@@ -14,7 +14,6 @@ struct VS_IN
 struct PS_IN
 {
     float4 pos : SV_POSITION;
-    //float2 tex : TEXCOORD;
 };
 
 PS_IN VSMain(VS_IN input)
@@ -24,7 +23,6 @@ PS_IN VSMain(VS_IN input)
     float4 pos = float4(input.pos, 1.0f);
     float4 modelPos = mul(pos, model);
     output.pos = mul(modelPos, viewProjection);
-    //output.tex = input.tex;
     
     return output;
 }

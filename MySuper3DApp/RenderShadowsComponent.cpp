@@ -57,9 +57,6 @@ void RenderShadowsComponent::Draw()
 {
 	std::cout << "222" << std::endl;
 
-	//Game::GetInstance()->GetRenderSystem()->context->PSSetShaderResources(0, 1, currentRenderComponent->textureView.GetAddressOf()); //
-	//Game::GetInstance()->GetRenderSystem()->context->PSSetSamplers(0, 1, currentRenderComponent->samplerState.GetAddressOf()); //
-
 	Game::GetInstance()->GetRenderSystem()->context->RSSetState(Game::GetInstance()->GetRenderShadowsSystem()->rastState.Get());
 	
 	Game::GetInstance()->GetRenderSystem()->context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

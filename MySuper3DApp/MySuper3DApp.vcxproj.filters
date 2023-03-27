@@ -96,9 +96,6 @@
     <ClCompile Include="RenderShadowsComponent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MeshComponent.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Delegates.h">
@@ -165,9 +162,6 @@
       <Filter>Project</Filter>
     </ClInclude>
     <ClInclude Include="RenderShadowsComponent.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

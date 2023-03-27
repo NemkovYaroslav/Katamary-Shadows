@@ -20,7 +20,6 @@ void KatamariDamacyGame::Initialize()
 	ground->isUseLight = true;
 	ground->CreatePlane(25.0f, "../Textures/moon.jpg");
 	ground->transformComponent->SetRotation(Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::Right, -DirectX::XM_PIDIV2));
-	//ground->transformComponent->SetPosition(Vector3(10, 0, 0));
 
 	GameObject* katamari = new GameObject();
 	katamari->isUseLight = true;
