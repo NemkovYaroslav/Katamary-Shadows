@@ -58,9 +58,9 @@ PS_IN VSMain(VS_IN input)
     return output;
 }
 
-Texture2D DiffuseMap          : register(t0);
-SamplerState Sampler          : register(s0);
-Texture2D ShadowMap           : register(t1);
+Texture2D DiffuseMap                    : register(t0);
+SamplerState Sampler                    : register(s0);
+Texture2D ShadowMap                     : register(t1);
 SamplerComparisonState ShadowMapSampler : register(s1);
 
 float3 CalcDirLight(RemLight remLight, float3 normal, float3 viewDir, float2 tex, float4 lightViewPosition);

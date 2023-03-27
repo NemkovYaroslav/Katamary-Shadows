@@ -42,8 +42,10 @@ void GameObject::CreateMesh(float scaleRate, std::string textureFileName, std::s
 
 	renderComponent->AddMesh(scaleRate, objectFileName);
 
-	renderShadowsComponent = new RenderShadowsComponent(renderComponent); //
+	renderShadowsComponent = new RenderShadowsComponent(); //
 	AddComponent(renderShadowsComponent); //
+
+	renderShadowsComponent->AddMesh(scaleRate, objectFileName);
 }
 
 void GameObject::Initialize()

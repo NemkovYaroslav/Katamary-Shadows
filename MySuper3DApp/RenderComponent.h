@@ -32,17 +32,19 @@ public:
     std::vector<Vector4> points;
     std::vector<int> indices;
 
-    Microsoft::WRL::ComPtr<ID3D11InputLayout>     inputLayout;
+    // вынести в render system
+    Microsoft::WRL::ComPtr<ID3D11InputLayout>     inputLayout;   // с шейдером
     Microsoft::WRL::ComPtr<ID3D11Buffer>          vertexBuffer;
     Microsoft::WRL::ComPtr<ID3D11Buffer>          indexBuffer;
+    Microsoft::WRL::ComPtr<ID3D11VertexShader>    vertexShader;  // с шейдером
+    Microsoft::WRL::ComPtr<ID3D11PixelShader>     pixelShader;   // с шейдером
+    Microsoft::WRL::ComPtr<ID3D11RasterizerState> rastState;     // с шейдером
+    Microsoft::WRL::ComPtr<ID3D11SamplerState>    samplerState;  // с шейдером
+    // вынести в render system
 
-    Microsoft::WRL::ComPtr<ID3D11VertexShader>    vertexShader;
-    Microsoft::WRL::ComPtr<ID3D11PixelShader>     pixelShader;
     ID3D11Buffer** constBuffer;
-    Microsoft::WRL::ComPtr<ID3D11RasterizerState> rastState;
 
     std::string textureFileName;
-    Microsoft::WRL::ComPtr<ID3D11Resource> texture;
-    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureView;
-    Microsoft::WRL::ComPtr<ID3D11SamplerState> samplerState;
+    Microsoft::WRL::ComPtr<ID3D11Resource> texture; // должна быть здесь и должно быть points и indices
+    Microsoft::WRL::ComPtr<ID3D11ShaderResourceView> textureView; // это тоже
 };
