@@ -20,7 +20,7 @@ cbuffer LightConstantBuffer : register(b1)
 cbuffer CameraConstantBuffer : register(b2)
 {
     row_major matrix lightViewProjection;
-    float3 cameraLightPosition;
+    //float3 cameraLightPosition;
 };
 
 struct VS_IN

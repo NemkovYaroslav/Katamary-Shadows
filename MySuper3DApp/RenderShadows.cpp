@@ -153,7 +153,7 @@ RenderShadows::RenderShadows()
 	);
 
 	CD3D11_RASTERIZER_DESC rastDesc = {};
-	rastDesc.CullMode = D3D11_CULL_FRONT;
+	rastDesc.CullMode = D3D11_CULL_FRONT; //
 	rastDesc.FillMode = D3D11_FILL_SOLID;
 	res = Game::GetInstance()->GetRenderSystem()->device->CreateRasterizerState(&rastDesc, rastState.GetAddressOf());
 }
