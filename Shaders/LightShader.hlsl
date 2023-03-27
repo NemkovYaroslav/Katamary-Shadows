@@ -17,6 +17,12 @@ cbuffer LightConstantBuffer : register(b1)
 	RemLight remLight;
 };
 
+cbuffer CameraConstantBuffer : register(b2)
+{
+    row_major matrix lightViewProjection;
+    float3 cameraLightPosition;
+};
+
 struct VS_IN
 {
     float3 pos : POSITION0;
@@ -27,6 +33,7 @@ struct VS_IN
 struct PS_IN
 {
     float4 pos : SV_POSITION;
+    float4 lightViewPosition : TEXCOORD1;
     float2 tex : TEXCOORD;
     float4 normal : NORMAL;
     float3 modelPos : POSITION;
@@ -43,25 +50,33 @@ PS_IN VSMain(VS_IN input)
     output.normal = mul(transpose(model), input.normal);
     output.modelPos = modelPos.xyz;
     
+    //
+    float4 modelLightPos = mul(modelPos, lightViewProjection);
+    output.lightViewPosition = modelLightPos;
+    //
+    
     return output;
 }
 
-Texture2D DiffuseMap;
-SamplerState Sampler;
+Texture2D DiffuseMap          : register(t0);
+SamplerState Sampler          : register(s0);
+Texture2D ShadowMap           : register(t1);
+SamplerComparisonState ShadowMapSampler : register(s1);
 
-float3 CalcDirLight(RemLight remLight, float3 normal, float3 viewDir, float2 tex);
+float3 CalcDirLight(RemLight remLight, float3 normal, float3 viewDir, float2 tex, float4 lightViewPosition);
+float IsLighted(float4 lightViewPosition, float3 lightDir, float3 normal);
 
 float4 PSMain(PS_IN input) : SV_Target
 {
     float3 norm    = normalize(input.normal);
     float3 viewDir = normalize(cameraPosition - input.modelPos);
 
-    float3 result  = CalcDirLight(remLight, norm, viewDir, input.tex);
+    float3 result = CalcDirLight(remLight, norm, viewDir, input.tex, input.lightViewPosition);
 
     return float4(result, 1.0f);
 }
 
-float3 CalcDirLight(RemLight remLight, float3 normal, float3 viewDir, float2 tex)
+float3 CalcDirLight(RemLight remLight, float3 normal, float3 viewDir, float2 tex, float4 lightViewPosition)
 {
     float3 diffValue = DiffuseMap.Sample(Sampler, tex).rgb;
     
@@ -76,13 +91,19 @@ float3 CalcDirLight(RemLight remLight, float3 normal, float3 viewDir, float2 tex
     float3 diffuse  = remLight.diffuse  * diff * diffValue;
     float3 specular = remLight.specular * spec * diffValue;
     
-    return (ambient + diffuse + specular);
+    float1 isLighted = 1;
+    
+    isLighted = IsLighted(lightViewPosition, lightDir, normal);
+    
+    return (ambient + (diffuse + specular) * isLighted);
 }
 
-/*
-float IsLighted(float4 lightViewPosition)
+
+float IsLighted(float4 lightViewPosition, float3 lightDir, float3 normal)
 {
-    float bias = 0.0005f;
+    float ndotl = dot(normal, lightDir);
+    float bias = clamp(0.005 * (1.0 - ndotl), 0, 0.0005);
+    
     float isVisibleForLight = 0;
     float3 projectTexCoord;
 
@@ -93,11 +114,17 @@ float IsLighted(float4 lightViewPosition)
     projectTexCoord.x = projectTexCoord.x * 0.5 + 0.5f;
     projectTexCoord.y = projectTexCoord.y * -0.5 + 0.5f;
 
-    float max_depth = depthTexture.Sample(objSamplerState, projectTexCoord.xy).r;
+    float max_depth = ShadowMap.SampleCmpLevelZero(ShadowMapSampler, projectTexCoord.xy, projectTexCoord.z);
 
     float currentDepth = (lightViewPosition.z / lightViewPosition.w);
 
     currentDepth = currentDepth - bias;
+    
+    if (max_depth < currentDepth)
+    {
+        return 0;
+    }
+    return max_depth;
 
     if (max_depth >= currentDepth)
     {
@@ -110,4 +137,3 @@ float IsLighted(float4 lightViewPosition)
 
     return isVisibleForLight;
 }
-*/

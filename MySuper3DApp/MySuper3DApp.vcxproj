@@ -167,6 +167,7 @@
     <ClCompile Include="KatamariControllerComponent.cpp" />
     <ClCompile Include="KatamariDamacyGame.cpp" />
     <ClCompile Include="LightComponent.cpp" />
+    <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="MySuper3DApp.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="RenderShadows.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="KatamariDamacyGame.h" />
     <ClInclude Include="Keys.h" />
     <ClInclude Include="LightComponent.h" />
+    <ClInclude Include="MeshComponent.h" />
     <ClInclude Include="RenderComponent.h" />
     <ClInclude Include="RenderShadows.h" />
     <ClInclude Include="RenderShadowsComponent.h" />

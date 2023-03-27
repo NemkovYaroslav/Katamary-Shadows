@@ -14,7 +14,7 @@ struct VS_IN
 struct PS_IN
 {
     float4 pos : SV_POSITION;
-    float2 tex : TEXCOORD;
+    //float2 tex : TEXCOORD;
 };
 
 PS_IN VSMain(VS_IN input)
@@ -24,13 +24,13 @@ PS_IN VSMain(VS_IN input)
     float4 pos = float4(input.pos, 1.0f);
     float4 modelPos = mul(pos, model);
     output.pos = mul(modelPos, viewProjection);
-    output.tex = input.tex;
+    //output.tex = input.tex;
     
     return output;
 }
 
-float4 PSMain(PS_IN input) : SV_Target
+float PSMain(PS_IN input) : SV_Depth
 {
     float depth = input.pos.z / input.pos.w;
-    return float4(depth, depth, depth, 1);
+    return depth;
 }

@@ -107,11 +107,11 @@ void Game::UpdateInternal()
 
 void Game::Draw()
 {
-	render->PrepareFrame();
-	render->Draw();
 	renderShadows->PrepareFrame();
 	renderShadows->Draw();
 	renderShadows->EndFrame();
+	render->PrepareFrame();
+	render->Draw();
 	render->EndFrame();
 }
 
