@@ -75,7 +75,6 @@ void RenderComponent::Initialize()
 		vertexShaderByteCode.GetAddressOf(),
 		&errorCode
 	);
-	
 	if (FAILED(res))
 	{
 		if (errorCode)
@@ -88,8 +87,7 @@ void RenderComponent::Initialize()
 			std::cout << "Missing Shader File: " << shaderFileName << std::endl;
 		}
 		return;
-	}
-	
+	}	
 	Game::GetInstance()->GetRenderSystem()->device->CreateVertexShader(
 		vertexShaderByteCode->GetBufferPointer(),
 		vertexShaderByteCode->GetBufferSize(),
