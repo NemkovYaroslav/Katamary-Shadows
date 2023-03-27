@@ -1,4 +1,4 @@
-#include "Camera.h"
+#include "CameraComponent.h"
 #include "Game.h"
 #include "DisplayWin32.h"
 #include "CameraController.h"

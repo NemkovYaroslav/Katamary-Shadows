@@ -3,7 +3,7 @@
 #include <WICTextureLoader.h>
 #include "Game.h"
 #include "DisplayWin32.h"
-#include "Camera.h"
+#include "CameraComponent.h"
 #include "RenderSystem.h"
 #include "GameObject.h"
 

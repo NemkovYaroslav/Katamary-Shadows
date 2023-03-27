@@ -3,6 +3,7 @@
 #include "DisplayWin32.h"
 #include "RenderComponent.h"
 #include "Game.h"
+#include "RenderShadows.h"
 
 RenderSystem::RenderSystem()
 {

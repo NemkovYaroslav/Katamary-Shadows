@@ -4,6 +4,7 @@
 #include "RenderShadows.h"
 #include "LightComponent.h"
 #include "GameObject.h"
+#include "CameraComponent.h"
 
 struct alignas(16) CameraLightData
 {
@@ -19,6 +20,8 @@ RenderShadowsComponent::RenderShadowsComponent(RenderComponent* currentRenderCom
 void RenderShadowsComponent::Initialize()
 {
 	Game::GetInstance()->GetRenderShadowsSystem()->renderShadowsComponents.push_back(this);
+
+	//
 
 	Microsoft::WRL::ComPtr<ID3DBlob> vertexShaderByteCode;
 	ID3DBlob* errorCode = nullptr;
@@ -54,6 +57,7 @@ void RenderShadowsComponent::Initialize()
 		nullptr, vertexShader.GetAddressOf()
 	);
 
+	/*
 	Microsoft::WRL::ComPtr<ID3DBlob> pixelShaderByteCode;
 	res = D3DCompileFromFile(
 		L"../Shaders/DepthShader.hlsl",
@@ -107,13 +111,12 @@ void RenderShadowsComponent::Initialize()
 		vertexShaderByteCode->GetBufferSize(),
 		inputLayout.GetAddressOf()
 	);
+	*/
 
 	CD3D11_RASTERIZER_DESC rastDesc = {};
 	rastDesc.CullMode = D3D11_CULL_NONE;
 	rastDesc.FillMode = D3D11_FILL_SOLID;
-
 	res = Game::GetInstance()->GetRenderSystem()->device->CreateRasterizerState(&rastDesc, rastState.GetAddressOf());
-
 
 	D3D11_DEPTH_STENCIL_DESC depthStencilStateDesc;
 	ZeroMemory(&depthStencilStateDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
@@ -121,6 +124,8 @@ void RenderShadowsComponent::Initialize()
 	depthStencilStateDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK::D3D11_DEPTH_WRITE_MASK_ALL;
 	depthStencilStateDesc.DepthFunc = D3D11_COMPARISON_FUNC::D3D11_COMPARISON_LESS_EQUAL;
 	Game::GetInstance()->GetRenderSystem()->context->OMSetDepthStencilState(Game::GetInstance()->GetRenderShadowsSystem()->depthStencilState.Get(), 0);
+
+	//
 
 	D3D11_BUFFER_DESC constBufferDesc = {};
 	constBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
@@ -155,14 +160,18 @@ void RenderShadowsComponent::Draw()
 	Game::GetInstance()->GetRenderSystem()->context->PSSetSamplers(0, 1, currentRenderComponent->samplerState.GetAddressOf());
 
 	Game::GetInstance()->GetRenderSystem()->context->RSSetState(rastState.Get());
-	Game::GetInstance()->GetRenderSystem()->context->IASetInputLayout(inputLayout.Get());
+
+	//Game::GetInstance()->GetRenderSystem()->context->IASetInputLayout(inputLayout.Get());
+	
 	Game::GetInstance()->GetRenderSystem()->context->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	Game::GetInstance()->GetRenderSystem()->context->IASetIndexBuffer(currentRenderComponent->indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+	//Game::GetInstance()->GetRenderSystem()->context->IASetIndexBuffer(currentRenderComponent->indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 	UINT strides[] = { 32 };
 	UINT offsets[] = { 0 };
-	Game::GetInstance()->GetRenderSystem()->context->IASetVertexBuffers(0, 1, currentRenderComponent->vertexBuffer.GetAddressOf(), strides, offsets);
+	//Game::GetInstance()->GetRenderSystem()->context->IASetVertexBuffers(0, 1, currentRenderComponent->vertexBuffer.GetAddressOf(), strides, offsets);
+
 	Game::GetInstance()->GetRenderSystem()->context->VSSetShader(vertexShader.Get(), nullptr, 0);
-	Game::GetInstance()->GetRenderSystem()->context->PSSetShader(pixelShader.Get(), nullptr, 0);
+	
+	//Game::GetInstance()->GetRenderSystem()->context->PSSetShader(Game::GetInstance()->GetRenderShadowsSystem()->pixelShader.Get(), nullptr, 0); // серый цвет
 
 	Game::GetInstance()->GetRenderSystem()->context->VSSetConstantBuffers(0, 1, constBuffer.GetAddressOf());
 	Game::GetInstance()->GetRenderSystem()->context->PSSetConstantBuffers(0, 1, constBuffer.GetAddressOf());

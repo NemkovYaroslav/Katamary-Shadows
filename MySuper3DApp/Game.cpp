@@ -2,7 +2,7 @@
 #include "RenderSystem.h"
 #include "DisplayWin32.h"
 #include "InputDevice.h"
-#include "Camera.h"
+#include "CameraComponent.h"
 #include "GameObject.h"
 #include "LightComponent.h"
 #include "RenderShadows.h"
@@ -108,6 +108,7 @@ void Game::UpdateInternal()
 void Game::Draw()
 {
 	render->PrepareFrame();
+	//renderShadows->Draw();
 	render->Draw();
 	renderShadows->Draw();
 	render->EndFrame();

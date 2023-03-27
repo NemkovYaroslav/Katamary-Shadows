@@ -15,7 +15,7 @@ XMMATRIX LightComponent::GetViewMatrix()
 
 XMMATRIX LightComponent::GetProjectionMatrix()
 {
-	return XMMatrixOrthographicLH(50.0f, 50.0f, 0.1f, 1000.0f);
+	return XMMatrixOrthographicLH(40.0f, 40.0f, 0.1f, 200.0f);
 	/*
 	return Matrix::CreatePerspectiveFieldOfView(
 		DirectX::XM_PIDIV2,

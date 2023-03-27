@@ -6,7 +6,7 @@
 #include "Component.h"
 
 #include "Game.h"
-#include "Camera.h"
+#include "CameraComponent.h"
 #include "CameraController.h"
 
 GameObject::GameObject(GameObject* parent)

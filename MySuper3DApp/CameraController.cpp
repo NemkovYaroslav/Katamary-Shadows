@@ -1,5 +1,5 @@
 #include "CameraController.h"
-#include "Camera.h"
+#include "CameraComponent.h"
 #include <algorithm>
 #include "GameObject.h"
 
