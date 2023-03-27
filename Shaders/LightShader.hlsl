@@ -120,7 +120,7 @@ float IsLighted(float4 lightViewPosition, float3 lightDir, float3 normal)
 
     currentDepth = currentDepth - bias;
     
-    if (max_depth < currentDepth)
+    if (max_depth <= currentDepth)
     {
         return 0;
     }
