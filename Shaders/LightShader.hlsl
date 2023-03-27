@@ -102,7 +102,7 @@ float3 CalcDirLight(RemLight remLight, float3 normal, float3 viewDir, float2 tex
 float IsLighted(float4 lightViewPosition, float3 lightDir, float3 normal)
 {
     float ndotl = dot(normal, lightDir);
-    float bias = clamp(0.005 * (1.0 - ndotl), 0, 0.0005);
+    float bias = clamp(0.005f * (1.0f - ndotl), 0.0f, 0.0005f);
     
     float isVisibleForLight = 0;
     float3 projectTexCoord;
@@ -125,15 +125,4 @@ float IsLighted(float4 lightViewPosition, float3 lightDir, float3 normal)
         return 0;
     }
     return max_depth;
-
-    if (max_depth >= currentDepth)
-    {
-        isVisibleForLight = 1;
-    }
-    else
-    {
-        isVisibleForLight = 0;
-    }
-
-    return isVisibleForLight;
 }

@@ -126,10 +126,6 @@ void RenderShadows::PrepareFrame()
 	Game::GetInstance()->GetRenderSystem()->context->OMSetRenderTargets(0, nullptr, depthStencilView.Get());
 	Game::GetInstance()->GetRenderSystem()->context->ClearDepthStencilView(depthStencilView.Get(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 	Game::GetInstance()->GetRenderSystem()->context->RSSetViewports(1, viewport.get());
-	//Game::GetInstance()->GetRenderSystem()->context->ClearState();
-	//Game::GetInstance()->GetRenderSystem()->context->RSSetViewports(1, viewport.get());
-	//float bgcolor[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-	//Game::GetInstance()->GetRenderSystem()->context->ClearRenderTargetView(lightDepthBufferRenderTargetView.Get(), bgcolor);
 }
 
 void RenderShadows::Draw()

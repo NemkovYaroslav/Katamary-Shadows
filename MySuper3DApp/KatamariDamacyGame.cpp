@@ -17,12 +17,10 @@ KatamariDamacyGame::KatamariDamacyGame(LPCWSTR name, int clientWidth, int client
 void KatamariDamacyGame::Initialize()
 {
 	GameObject* ground = new GameObject();
-	ground->isUseLight = true;
 	ground->CreatePlane(25.0f, "../Textures/moon.jpg");
 	ground->transformComponent->SetRotation(Quaternion::CreateFromAxisAngle(DirectX::SimpleMath::Vector3::Right, -DirectX::XM_PIDIV2));
 
 	GameObject* katamari = new GameObject();
-	katamari->isUseLight = true;
 	katamari->CreateMesh(50.0f, "../Textures/katamari0.png", "../Models/katamari0.obj");
 	katamari->transformComponent->SetPosition(Vector3(0, 1, 0));
 	katamari->radius = 1.0f;
@@ -58,7 +56,6 @@ void KatamariDamacyGame::Initialize()
 	Game::GetInstance()->AddGameObject(removeLight); // 3
 
 	GameObject* bigBoy = new GameObject();
-	bigBoy->isUseLight = true;
 	bigBoy->CreateMesh(2.0f, "../Textures/SpaceMan.png", "../Models/SpaceMan.fbx");
 	bigBoy->radius = 1.0f;
 	bigBoy->maxRadius = 1.0f + 0.05f * 20 - 0.001f;
@@ -73,7 +70,6 @@ void KatamariDamacyGame::Initialize()
 	for (int i = 0; i < 10; i++)
 	{
 		objectN = new GameObject();
-		objectN->isUseLight = true;
 		objectN->CreateMesh(0.5f, "../Textures/spacemem.png", "../Models/spacemem.fbx");  objectN->radius = 0.5f;
 		objectN->maxRadius = 0.5f;
 		objectCollisionN = new CollisionComponent();
@@ -85,7 +81,6 @@ void KatamariDamacyGame::Initialize()
 	}
 	for (int i = 0; i < 10; i++) {
 		objectN = new GameObject();
-		objectN->isUseLight = true;
 		objectN->CreateMesh(0.5f, "../Textures/spacemem.png", "../Models/spacemem.fbx");
 		objectN->radius = 0.5f;
 		objectN->maxRadius = 0.5f;

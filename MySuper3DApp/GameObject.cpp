@@ -16,7 +16,6 @@ GameObject::GameObject(GameObject* parent)
 	this->renderComponent = nullptr;
 	this->collisionComponent = nullptr;
 	this->radius = 0.0f;
-	this->isUseLight = false;
 }
 
 GameObject::~GameObject()
@@ -31,30 +30,14 @@ GameObject::~GameObject()
 void GameObject::CreatePlane(float radius, std::string textureFileName)
 {
 	this->radius = radius;
-	if (isUseLight)
-	{
-		renderComponent = new RenderComponent("../Shaders/LightShader.hlsl", textureFileName, D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	}
-	else
-	{
-		renderComponent = new RenderComponent("../Shaders/TextureShader.hlsl", textureFileName, D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	}
-	renderComponent->isLight = isUseLight;
+	renderComponent = new RenderComponent("../Shaders/LightShader.hlsl", textureFileName, D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	renderComponent->AddPlane(radius);
 	AddComponent(renderComponent);
 }
 
 void GameObject::CreateMesh(float scaleRate, std::string textureFileName, std::string objectFileName)
 {
-	if (isUseLight)
-	{
-		renderComponent = new RenderComponent("../Shaders/LightShader.hlsl", textureFileName, D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	}
-	else
-	{
-		renderComponent = new RenderComponent("../Shaders/TextureShader.hlsl", textureFileName, D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	}
-	renderComponent->isLight = isUseLight;
+	renderComponent = new RenderComponent("../Shaders/LightShader.hlsl", textureFileName, D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	AddComponent(renderComponent);
 
 	renderComponent->AddMesh(scaleRate, objectFileName);

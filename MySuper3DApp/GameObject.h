@@ -20,7 +20,6 @@ public:
 
 	std::vector<Component*> components;
 
-	bool isUseLight;
 	float radius;
 	float maxRadius = 0;
 

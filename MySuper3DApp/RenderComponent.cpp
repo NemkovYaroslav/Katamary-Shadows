@@ -10,14 +10,12 @@
 
 RenderComponent::RenderComponent(std::string shaderFileName, D3D_PRIMITIVE_TOPOLOGY topology) : Component()
 {
-	this->isLight = false;
 	this->shaderFileName = shaderFileName;
 	this->topology = topology;
 }
 
 RenderComponent::RenderComponent(std::string shaderFileName, std::string textureFileName, D3D_PRIMITIVE_TOPOLOGY topology) : Component()
 {
-	this->isLight = false;
 	this->textureFileName = textureFileName;
 	this->shaderFileName = shaderFileName;
 	this->topology = topology;
@@ -48,14 +46,8 @@ struct alignas(16) ShadowData
 
 void RenderComponent::Initialize()
 {
-	if (isLight)
-	{
-		constBuffer = new ID3D11Buffer* [3];
-	}
-	else
-	{
-		constBuffer = new ID3D11Buffer* [1];
-	}
+
+	constBuffer = new ID3D11Buffer* [3];
 
 	Game::GetInstance()->GetRenderSystem()->renderComponents.push_back(this);
 
@@ -112,84 +104,42 @@ void RenderComponent::Initialize()
 		nullptr, pixelShader.GetAddressOf()
 	);
 
-	if (isLight)
-	{
-		D3D11_INPUT_ELEMENT_DESC inputElements[] = {
-			D3D11_INPUT_ELEMENT_DESC {
-				"POSITION",
-				0,
-				DXGI_FORMAT_R32G32B32A32_FLOAT,
-				0,
-				0,
-				D3D11_INPUT_PER_VERTEX_DATA,
-				0
-			},
-			D3D11_INPUT_ELEMENT_DESC {
-				"TEXCOORD",
-				0,
-				DXGI_FORMAT_R32G32B32A32_FLOAT,
-				0,
-				D3D11_APPEND_ALIGNED_ELEMENT,
-				D3D11_INPUT_PER_VERTEX_DATA,
-				0
-			},
-			D3D11_INPUT_ELEMENT_DESC {
-				"NORMAL",
-				0,
-				DXGI_FORMAT_R32G32B32A32_FLOAT,
-				0,
-				D3D11_APPEND_ALIGNED_ELEMENT,
-				D3D11_INPUT_PER_VERTEX_DATA,
-				0
-			}
-		};
-		Game::GetInstance()->GetRenderSystem()->device->CreateInputLayout(
-			inputElements,
-			3,
-			vertexShaderByteCode->GetBufferPointer(),
-			vertexShaderByteCode->GetBufferSize(),
-			inputLayout.GetAddressOf()
-		);
-	}
-	else
-	{
-		D3D11_INPUT_ELEMENT_DESC inputElements[] = {
-			D3D11_INPUT_ELEMENT_DESC {
-				"POSITION",
-				0,
-				DXGI_FORMAT_R32G32B32A32_FLOAT,
-				0,
-				0,
-				D3D11_INPUT_PER_VERTEX_DATA,
-				0
-			},
-			D3D11_INPUT_ELEMENT_DESC {
-				"TEXCOORD",
-				0,
-				DXGI_FORMAT_R32G32B32A32_FLOAT,
-				0,
-				D3D11_APPEND_ALIGNED_ELEMENT,
-				D3D11_INPUT_PER_VERTEX_DATA,
-				0
-			},
-			D3D11_INPUT_ELEMENT_DESC {
-				"NORMAL",
-				0,
-				DXGI_FORMAT_R32G32B32A32_FLOAT,
-				0,
-				D3D11_APPEND_ALIGNED_ELEMENT,
-				D3D11_INPUT_PER_VERTEX_DATA,
-				0
-			}
-		};
-		Game::GetInstance()->GetRenderSystem()->device->CreateInputLayout(
-			inputElements,
-			3,
-			vertexShaderByteCode->GetBufferPointer(),
-			vertexShaderByteCode->GetBufferSize(),
-			inputLayout.GetAddressOf()
-		);
-	}
+	D3D11_INPUT_ELEMENT_DESC inputElements[] = {
+		D3D11_INPUT_ELEMENT_DESC {
+			"POSITION",
+			0,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			0,
+			0,
+			D3D11_INPUT_PER_VERTEX_DATA,
+			0
+		},
+		D3D11_INPUT_ELEMENT_DESC {
+			"TEXCOORD",
+			0,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			0,
+			D3D11_APPEND_ALIGNED_ELEMENT,
+			D3D11_INPUT_PER_VERTEX_DATA,
+			0
+		},
+		D3D11_INPUT_ELEMENT_DESC {
+			"NORMAL",
+			0,
+			DXGI_FORMAT_R32G32B32A32_FLOAT,
+			0,
+			D3D11_APPEND_ALIGNED_ELEMENT,
+			D3D11_INPUT_PER_VERTEX_DATA,
+			0
+		}
+	};
+	Game::GetInstance()->GetRenderSystem()->device->CreateInputLayout(
+		inputElements,
+		3,
+		vertexShaderByteCode->GetBufferPointer(),
+		vertexShaderByteCode->GetBufferSize(),
+		inputLayout.GetAddressOf()
+	);
 
 	D3D11_BUFFER_DESC vertexBufDesc = {};
 	vertexBufDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -240,46 +190,32 @@ void RenderComponent::Initialize()
 	rastDesc.FillMode = D3D11_FILL_SOLID;
 	Game::GetInstance()->GetRenderSystem()->device->CreateRasterizerState(&rastDesc, rastState.GetAddressOf());
 
-	if (isLight)
-	{
-		D3D11_BUFFER_DESC firstConstBufferDesc = {};
-		firstConstBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-		firstConstBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		firstConstBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		firstConstBufferDesc.MiscFlags = 0;
-		firstConstBufferDesc.StructureByteStride = 0;
-		firstConstBufferDesc.ByteWidth = sizeof(CameraData);
-		Game::GetInstance()->GetRenderSystem()->device->CreateBuffer(&firstConstBufferDesc, nullptr, &constBuffer[0]);
+	D3D11_BUFFER_DESC firstConstBufferDesc = {};
+	firstConstBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	firstConstBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	firstConstBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	firstConstBufferDesc.MiscFlags = 0;
+	firstConstBufferDesc.StructureByteStride = 0;
+	firstConstBufferDesc.ByteWidth = sizeof(CameraData);
+	Game::GetInstance()->GetRenderSystem()->device->CreateBuffer(&firstConstBufferDesc, nullptr, &constBuffer[0]);
 
-		D3D11_BUFFER_DESC secondConstBufferDesc = {};
-		secondConstBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-		secondConstBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		secondConstBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		secondConstBufferDesc.MiscFlags = 0;
-		secondConstBufferDesc.StructureByteStride = 0;
-		secondConstBufferDesc.ByteWidth = sizeof(LightData);
-		Game::GetInstance()->GetRenderSystem()->device->CreateBuffer(&secondConstBufferDesc, nullptr, &constBuffer[1]);
+	D3D11_BUFFER_DESC secondConstBufferDesc = {};
+	secondConstBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	secondConstBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	secondConstBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	secondConstBufferDesc.MiscFlags = 0;
+	secondConstBufferDesc.StructureByteStride = 0;
+	secondConstBufferDesc.ByteWidth = sizeof(LightData);
+	Game::GetInstance()->GetRenderSystem()->device->CreateBuffer(&secondConstBufferDesc, nullptr, &constBuffer[1]);
 		
-		D3D11_BUFFER_DESC thirdConstBufferDesc = {};
-		thirdConstBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-		thirdConstBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		thirdConstBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		thirdConstBufferDesc.MiscFlags = 0;
-		thirdConstBufferDesc.StructureByteStride = 0;
-		thirdConstBufferDesc.ByteWidth = sizeof(ShadowData);
-		Game::GetInstance()->GetRenderSystem()->device->CreateBuffer(&thirdConstBufferDesc, nullptr, &constBuffer[2]);
-	}
-	else
-	{
-		D3D11_BUFFER_DESC firstConstBufferDesc = {};
-		firstConstBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
-		firstConstBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-		firstConstBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-		firstConstBufferDesc.MiscFlags = 0;
-		firstConstBufferDesc.StructureByteStride = 0;
-		firstConstBufferDesc.ByteWidth = sizeof(CameraData);
-		Game::GetInstance()->GetRenderSystem()->device->CreateBuffer(&firstConstBufferDesc, nullptr, &constBuffer[0]);
-	}
+	D3D11_BUFFER_DESC thirdConstBufferDesc = {};
+	thirdConstBufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	thirdConstBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	thirdConstBufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	thirdConstBufferDesc.MiscFlags = 0;
+	thirdConstBufferDesc.StructureByteStride = 0;
+	thirdConstBufferDesc.ByteWidth = sizeof(ShadowData);
+	Game::GetInstance()->GetRenderSystem()->device->CreateBuffer(&thirdConstBufferDesc, nullptr, &constBuffer[2]);
 }
 
 void RenderComponent::Update(float deltaTime)
@@ -295,27 +231,24 @@ void RenderComponent::Update(float deltaTime)
 	memcpy(firstMappedResource.pData, &cameraData, sizeof(CameraData));
 	Game::GetInstance()->GetRenderSystem()->context->Unmap(constBuffer[0], 0);
 
-	if (isLight)
+	const LightData lightData
 	{
-		const LightData lightData
-		{
-			RemLightData {}
-		};
-		D3D11_MAPPED_SUBRESOURCE secondMappedResource;
-		Game::GetInstance()->GetRenderSystem()->context->Map(constBuffer[1], 0, D3D11_MAP_WRITE_DISCARD, 0, &secondMappedResource);
-		memcpy(secondMappedResource.pData, &lightData, sizeof(LightData));
-		Game::GetInstance()->GetRenderSystem()->context->Unmap(constBuffer[1], 0);
+		RemLightData {}
+	};
+	D3D11_MAPPED_SUBRESOURCE secondMappedResource;
+	Game::GetInstance()->GetRenderSystem()->context->Map(constBuffer[1], 0, D3D11_MAP_WRITE_DISCARD, 0, &secondMappedResource);
+	memcpy(secondMappedResource.pData, &lightData, sizeof(LightData));
+	Game::GetInstance()->GetRenderSystem()->context->Unmap(constBuffer[1], 0);
 
-		const ShadowData lightShadowData
-		{
-			Game::GetInstance()->currentLight->GetViewMatrix() * Game::GetInstance()->currentLight->GetProjectionMatrix(),
-			Game::GetInstance()->currentLight->gameObject->transformComponent->GetPosition()
-		};
-		D3D11_MAPPED_SUBRESOURCE thirdMappedResource;
-		Game::GetInstance()->GetRenderSystem()->context->Map(constBuffer[2], 0, D3D11_MAP_WRITE_DISCARD, 0, &thirdMappedResource);
-		memcpy(thirdMappedResource.pData, &lightShadowData, sizeof(ShadowData));
-		Game::GetInstance()->GetRenderSystem()->context->Unmap(constBuffer[2], 0);
-	}
+	const ShadowData lightShadowData
+	{
+		Game::GetInstance()->currentLight->GetViewMatrix() * Game::GetInstance()->currentLight->GetProjectionMatrix(),
+		Game::GetInstance()->currentLight->gameObject->transformComponent->GetPosition()
+	};
+	D3D11_MAPPED_SUBRESOURCE thirdMappedResource;
+	Game::GetInstance()->GetRenderSystem()->context->Map(constBuffer[2], 0, D3D11_MAP_WRITE_DISCARD, 0, &thirdMappedResource);
+	memcpy(thirdMappedResource.pData, &lightShadowData, sizeof(ShadowData));
+	Game::GetInstance()->GetRenderSystem()->context->Unmap(constBuffer[2], 0);
 }
 
 void RenderComponent::Draw()
@@ -331,32 +264,14 @@ void RenderComponent::Draw()
 	Game::GetInstance()->GetRenderSystem()->context->IASetInputLayout(inputLayout.Get());
 	Game::GetInstance()->GetRenderSystem()->context->IASetPrimitiveTopology(topology);
 	Game::GetInstance()->GetRenderSystem()->context->IASetIndexBuffer(indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
-	UINT strides[1] {};
-	UINT offsets[1] {};
-	if (isLight)
-	{
-		strides[0] = { 48 };
-		offsets[0] = { 0  };
-	}
-	else
-	{
-		strides[0] = { 32 };
-		offsets[0] = { 0  };
-	}
+	UINT strides[] { 48 };
+	UINT offsets[] { 0 };
 	Game::GetInstance()->GetRenderSystem()->context->IASetVertexBuffers(0, 1, vertexBuffer.GetAddressOf(), strides, offsets);
 	Game::GetInstance()->GetRenderSystem()->context->VSSetShader(vertexShader.Get(), nullptr, 0);
 	Game::GetInstance()->GetRenderSystem()->context->PSSetShader(pixelShader.Get(), nullptr, 0);
 	
-	if (isLight)
-	{
-		Game::GetInstance()->GetRenderSystem()->context->VSSetConstantBuffers(0, 3, constBuffer);
-		Game::GetInstance()->GetRenderSystem()->context->PSSetConstantBuffers(0, 3, constBuffer);
-	}
-	else
-	{
-		Game::GetInstance()->GetRenderSystem()->context->VSSetConstantBuffers(0, 1, constBuffer);
-		Game::GetInstance()->GetRenderSystem()->context->PSSetConstantBuffers(0, 1, constBuffer);
-	}
+	Game::GetInstance()->GetRenderSystem()->context->VSSetConstantBuffers(0, 3, constBuffer);
+	Game::GetInstance()->GetRenderSystem()->context->PSSetConstantBuffers(0, 3, constBuffer);
 	
 	Game::GetInstance()->GetRenderSystem()->context->DrawIndexed(indices.size(), 0, 0);
 }
@@ -392,24 +307,12 @@ void RenderComponent::AddGrid(int gridSize, float cellSize, Color color)
 }
 void RenderComponent::AddPlane(float radius)
 {
-	if (isLight)
-	{
-		points = {
-			Vector4(   radius,   radius, 0.0f, 1.0f), Vector4(radius, radius, 0.0f, 0.0f), Vector4(0.0f, 0.0f, 1.0f, 0.0f),
-			Vector4( - radius, - radius, 0.0f, 1.0f), Vector4(0.0f,   0.0f,   0.0f, 0.0f), Vector4(0.0f, 0.0f, 1.0f, 0.0f),
-			Vector4(   radius, - radius, 0.0f, 1.0f), Vector4(radius, 0.0f,   0.0f, 0.0f), Vector4(0.0f, 0.0f, 1.0f, 0.0f),
-			Vector4( - radius,   radius, 0.0f, 1.0f), Vector4(0.0f,   radius, 0.0f, 0.0f), Vector4(0.0f, 0.0f, 1.0f, 0.0f)
-		};
-	}
-	else
-	{
-		points = {
-			Vector4(   radius,   radius, 0.0f, 1.0f), Vector4(radius, radius, 0.0f, 0.0f),
-			Vector4( - radius, - radius, 0.0f, 1.0f), Vector4(0.0f,   0.0f,   0.0f, 0.0f), 
-			Vector4(   radius, - radius, 0.0f, 1.0f), Vector4(radius, 0.0f,   0.0f, 0.0f), 
-			Vector4( - radius,   radius, 0.0f, 1.0f), Vector4(0.0f,   radius, 0.0f, 0.0f)
-		};
-	}
+	points = {
+		Vector4(   radius,   radius, 0.0f, 1.0f), Vector4(radius, radius, 0.0f, 0.0f), Vector4(0.0f, 0.0f, 1.0f, 0.0f),
+		Vector4( - radius, - radius, 0.0f, 1.0f), Vector4(0.0f,   0.0f,   0.0f, 0.0f), Vector4(0.0f, 0.0f, 1.0f, 0.0f),
+		Vector4(   radius, - radius, 0.0f, 1.0f), Vector4(radius, 0.0f,   0.0f, 0.0f), Vector4(0.0f, 0.0f, 1.0f, 0.0f),
+		Vector4( - radius,   radius, 0.0f, 1.0f), Vector4(0.0f,   radius, 0.0f, 0.0f), Vector4(0.0f, 0.0f, 1.0f, 0.0f)
+	};
 	indices = { 0, 1, 2, 1, 0, 3 };
 }
 
@@ -456,11 +359,7 @@ void RenderComponent::ProcessMesh(aiMesh* mesh, const aiScene* scene, float scal
 
 		points.push_back({ mesh->mVertices[i].x * scaleRate, mesh->mVertices[i].y * scaleRate, mesh->mVertices[i].z * scaleRate, 1.0f});
 		points.push_back(textureCoordinate);
-		
-		if (isLight)
-		{
-			points.push_back(normal);
-		}
+		points.push_back(normal);
 	}
 
 	for (UINT i = 0; i < mesh->mNumFaces; i++) {

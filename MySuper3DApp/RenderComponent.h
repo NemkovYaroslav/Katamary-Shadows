@@ -12,8 +12,6 @@ class RenderComponent : public Component
 {
 public:
 
-    bool isLight;
-
     RenderComponent(std::string shaderFileName, D3D_PRIMITIVE_TOPOLOGY topology);
     RenderComponent(std::string shaderFileName, std::string textureFileName, D3D_PRIMITIVE_TOPOLOGY topology);
     RenderComponent() = delete;
